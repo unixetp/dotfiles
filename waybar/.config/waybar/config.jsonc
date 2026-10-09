@@ -1,0 +1,108 @@
+{
+  "position": "top",
+  "margin-left": 0,
+  "margin-right": 0,
+  "height": 40,
+  "modules-left": ["hyprland/workspaces", "hyprland/window"],
+  "modules-center": ["group/time"],
+  "modules-right": [
+    "privacy",
+    "custom/warp",
+    "hyprland/language",
+    "pulseaudio",
+    "group/hardware",
+    "tray",
+    "network"
+  ],
+  "hyprland/window": {
+    "format": "{initialTitle}",
+    "max-length": 35,
+    "rewrite": {
+      "": "Hyprland",
+      "kitty": "Terminal",
+    },
+    "separate-outputs": false,
+  },
+  "hyprland/language": {
+    "format": "<span></span>  {}",
+    "format-en": "EN",
+    "format-ru": "RU"
+  },
+  "hyprland/workspaces": {
+    "on-click": "activate",
+    "sort-by-number": true,
+    "persistent-workspaces": {
+      "1": "1",
+      "2": "2",
+      "3": "3",
+      "4": "4",
+      "5": "5",
+      "6": "6",
+    },
+  },
+
+  "group/hardware": {
+    "orientation": "horizontal",
+    "modules": ["cpu", "memory", "temperature"],
+  },
+  "cpu": {
+    "format": "<span></span>  {usage}%",
+    "tooltip": false,
+  },
+  "memory": {
+    "format": "<span></span>  {percentage}%",
+  },
+  "temperature": {
+    "thermal-zone": 1,
+    "interval": 2,
+    "critical-threshold": 80,
+    "format": "<span></span> {temperatureC}°C",
+    "format-critical": "<span></span> {temperatureC}°C",
+    "tooltip": false,
+  },
+
+  "pulseaudio": {
+    "format": "<span>{icon}</span>  {volume}%",
+    "format-muted": " ",
+    "format-icons": {
+      "headphone": "",
+      "default": ["", "", ""],
+    },
+    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+  },
+
+  "group/time": {
+    "modules": ["clock", "clock#simple"],
+    "orientation": "horizontal",
+  },
+  "clock#simple": {
+    "format": "{:%H:%M:%S}",
+    "tooltip": false,
+    "interval": 1,
+  },
+  "clock": {
+    "format": "{:L%a %d, %b %Y}",
+    "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+  },
+
+  "privacy": {
+    "icon-size": 15,
+    "icon-spacing": 8,
+  },
+  "network": {
+    "format-wifi": "<span> </span>",
+    "format-ethernet": "<span> </span>",
+    "format-disconnected": "<span>⚠</span>",
+    "tooltip": false,
+  },
+  "tray": {
+    "spacing": 10,
+  },
+  "custom/warp": {
+    "exec": "$HOME/.config/waybar/warp_toggle.py",
+    "return-type": "json",
+    "interval": 2,
+    "signal": 8,
+    "on-click": "$HOME/.config/waybar/warp_toggle.py toggle"
+  }
+}

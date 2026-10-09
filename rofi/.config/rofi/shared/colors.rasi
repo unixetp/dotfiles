@@ -1,0 +1,13 @@
+* {
+    background: #121318;
+    background-alt: #1e1f25;
+    foreground: #e3e2e9;
+    foreground-colour: #e3e2e9;
+    background-colour: #121318;
+    alternate-background: #292a2f;
+    borderColor: #8f909a;
+    border-colour: #45464f;
+    handle-colour: #c6c6d0;
+    urgent: #ffb4ab;
+    active-window: #c1c5dd;
+}

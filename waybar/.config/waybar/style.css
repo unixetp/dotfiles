@@ -1,0 +1,169 @@
+@import "current_theme.css";
+* {
+  font-family:
+    "JetBrains Mono NerdFont", FontAwesome, Roboto, Helvetica, Arial, sans-serif;
+  font-size: 1.01em;
+}
+window#waybar {
+  background-color: transparent;
+  border-radius: 0;
+  transition-property: background-color;
+  transition-duration: 0.5s;
+}
+window#waybar > box {
+  padding: 5px 0;
+}
+button {
+  box-shadow: inset 0 -3px transparent;
+  border: none;
+  border-radius: 10px;
+}
+button:hover {
+  background: inherit;
+  border: none;
+}
+#workspaces {
+  font-weight: 800;
+  margin-right: 5px;
+  background-color: @background;
+  color: @foreground;
+  border-radius: 10px;
+}
+#workspaces button {
+  border-radius: 10px;
+  padding: 0 8px;
+  color: inherit;
+  background-color: transparent;
+  transition: 0.5s ease-out;
+}
+#workspaces button:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+#workspaces button.active {
+  background-color: @foreground-dark;
+  color: @background;
+}
+#workspaces button.active:nth-child(1) {
+  border-radius: 10px 0 0 10px;
+}
+#workspaces button.active:nth-last-child(1) {
+  border-radius: 0 10px 10px 0;
+}
+#workspaces button.urgent {
+  border-bottom: 2px solid @orange;
+  border-radius: 0;
+}
+#workspaces button.urgent:nth-child(1) {
+  border-bottom: 2px solid @orange;
+  border-radius: 10px 0 0 10px;
+}
+#workspaces button.urgent:nth-last-child(1) {
+  border-bottom: 2px solid @orange;
+  border-radius: 0 10px 10px 0;
+}
+#hardware {
+  margin-right: 5px;
+}
+#cpu {
+  padding-right: 10px;
+}
+#memory {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+#temperature {
+  padding-left: 10px;
+}
+#temperature.critical {
+  color: @red;
+}
+#pulseaudio {
+  font-weight: 700;
+  background-color: @background;
+  color: @foreground;
+  padding: 6px 10px;
+  border-radius: 10px;
+  margin-right: 5px;
+}
+#pulseaudio:hover {
+  background-color: @overlay;
+}
+#pulseaudio.muted {
+  color: @red;
+}
+#privacy {
+  background-color: @background;
+  color: @power;
+  border: 1.5px solid @power;
+  padding: 6px 10px;
+  border-radius: 10px;
+  margin-right: 10px;
+}
+#language {
+  margin-right: 5px;
+}
+#time {
+  border-radius: 10px;
+  font-weight: 700;
+  background-color: @background;
+  color: @foreground;
+}
+#clock.simple {
+  padding: 6px 10px;
+  background-color: @foreground-dark;
+  color: @background;
+  border-radius: 0 10px 10px 0;
+  font-weight: 700;
+}
+#clock {
+  padding: 6px 10px;
+  border-radius: 10px 0 0 10px;
+}
+#tray {
+  margin-right: 5px;
+}
+#tray > .passive {
+  -gtk-icon-effect: dim;
+}
+#tray > .needs-attention {
+  -gtk-icon-effect: highlight;
+}
+#battery,
+#network,
+#hardware,
+#window,
+#tray,
+#language {
+  font-weight: 700;
+  background-color: @background;
+  color: @foreground;
+  padding: 6px 10px;
+  border-radius: 10px;
+}
+.modules-right {
+  padding: 0 10px;
+}
+.modules-left {
+  padding: 0 10px;
+}
+label:focus {
+  background-color: #000;
+}
+label span {
+  color: @power;
+}
+#custom-vpn {
+  font-weight: 700;
+  background-color: @background;
+  color: @foreground;
+  padding: 6px 10px;
+  border-radius: 10px;
+  margin-left: 0px;
+  margin-right: 5px;
+}
+#custom-vpn.disabled {
+  color: #888888;
+}
+#custom-vpn.enabled {
+  color: #a6e3a1;
+}

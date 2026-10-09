@@ -1,0 +1,78 @@
+@import "./shared/colors.rasi"
+* {
+    font: "JetBrains Mono Nerd Font 13";
+    background-color: transparent;
+    text-color: @foreground;
+}
+window {
+    transparency: "real";
+    location: center;
+    anchor: center;
+    fullscreen: false;
+    width: 380px;
+    x-offset: 0px;
+    y-offset: 48px;
+    opacity: 0.8;
+    background-color: @background;
+    enabled: true;
+    margin: 0px;
+    padding: 0px;
+    border: 2px solid;
+    border-color: @borderColor;
+    border-radius: 10px;
+    cursor: "default";
+}
+mainbox {
+    enabled: true;
+    spacing: 0px;
+    margin: 0px;
+    padding: 0px;
+    border: 0px solid;
+    background-color: transparent;
+    children: [ "listview" ];
+}
+listview {
+    enabled: true;
+    columns: 1;
+    lines: 6;
+    cycle: true;
+    dynamic: true;
+    scrollbar: false;
+    layout: vertical;
+    reverse: false;
+    fixed-height: true;
+    fixed-columns: true;
+    spacing: 6px;
+    margin: 0px;
+    padding: 10px;
+    border: 0px solid;
+    background-color: transparent;
+    cursor: "default";
+}
+element {
+    enabled: true;
+    orientation: horizontal;
+    spacing: 10px;
+    margin: 0px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background-color: transparent;
+    text-color: @foreground;
+    cursor: pointer;
+}
+element normal.normal {
+    background-color: transparent;
+    text-color: @foreground;
+}
+element selected.normal {
+    background-color: @foreground;
+    text-color: @background;
+}
+element-text {
+    background-color: transparent;
+    text-color: inherit;
+    highlight: inherit;
+    cursor: inherit;
+    vertical-align: 0.5;
+    horizontal-align: 0.0;
+}

@@ -1,0 +1,13 @@
+@define-color base            #121318;
+@define-color surface         #121318;
+@define-color overlay         #45464f;
+@define-color text            #e3e1e9;
+@define-color subtext         #c6c6d0;
+@define-color primary         #b5c4ff;
+@define-color on_primary      #1c2d61;
+@define-color secondary       #c2c5dd;
+@define-color on_secondary    #2b3042;
+@define-color tertiary        #e3bada;
+@define-color error           #ffb4ab;
+@define-color primary_container   #344479;
+@define-color on_primary_container #dce1ff;

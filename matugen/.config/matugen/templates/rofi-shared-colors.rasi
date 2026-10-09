@@ -1,0 +1,13 @@
+* {
+    background: {{colors.surface.default.hex}};
+    background-alt: {{colors.surface_container.default.hex}};
+    foreground: {{colors.on_surface.default.hex}};
+    foreground-colour: {{colors.on_surface.default.hex}};
+    background-colour: {{colors.surface.default.hex}};
+    alternate-background: {{colors.surface_container_high.default.hex}};
+    borderColor: {{colors.outline.default.hex}};
+    border-colour: {{colors.outline_variant.default.hex}};
+    handle-colour: {{colors.on_surface_variant.default.hex}};
+    urgent: {{colors.error.default.hex}};
+    active-window: {{colors.secondary.default.hex}};
+}

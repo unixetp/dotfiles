@@ -1,0 +1,25 @@
+[config]
+contrast = 0.0
+theme = "dark"
+
+[templates.kitty]
+input_path = '~/.config/matugen/templates/kitty-colors.conf'
+output_path = '~/.config/kitty/colors.conf'
+post_hook = 'killall -SIGUSR1 kitty'
+
+[templates.dunst]
+input_path = '~/.config/matugen/templates/dunst.conf'
+output_path = '~/.config/dunst/dunstrc'
+
+[templates.rofi]
+input_path = '~/.config/matugen/templates/rofi-shared-colors.rasi'
+output_path = '~/.config/rofi/shared/colors.rasi'
+
+[templates.waybar]
+input_path = '~/.config/matugen/templates/waybar-current.css'
+output_path = '~/.config/waybar/current_theme.css'
+post_hook = 'pkill waybar; sleep 0.3; setsid -f waybar'
+
+[templates.swaylock]
+input_path = '~/.config/matugen/templates/swaylock.conf'
+output_path = '~/.config/swaylock/config'

@@ -1,0 +1,7 @@
+# Local and generated state
+*.save
+*.bak
+*.test
+__pycache__/
+*.py[cod]
+.DS_Store
