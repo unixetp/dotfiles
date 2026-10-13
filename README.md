@@ -11,3 +11,4 @@ The installer checks what is missing and asks before installing. It uses `pacman
 Add your wallpapers to `~/Pictures/Wallpapers`. If this is a new WARP install, register it with Cloudflare after setup.
 
 An AI combined the repo and all the dotfiles into one repo cuz im lazy.
+(i think about rewriting it in quickshell or smth)
