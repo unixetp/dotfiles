@@ -6,7 +6,7 @@ cd dotfiles
 ./install.sh
 ```
 
-The installer checks what is missing and asks before installing. It uses `pacman -Syu` (a full system upgrade) for Arch packages and builds AUR packages locally. It asks for your sudo password only when required. Existing config files are backed up to `~/.config-backups/`.
+The installer installs the packages used by the included Hyprland setup, including the Bibata cursor theme from the AUR. It uses `pacman -Syu`, which performs a full system upgrade. Existing config files are backed up under `~/.config-backup-*` before being replaced. Log out and back in after installation to load the Hyprland config and start Waybar.
 
 Add your wallpapers to `~/Pictures/Wallpapers`. If this is a new WARP install, register it with Cloudflare after setup.
 

@@ -1,163 +1,96 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [[ "${EUID:-$(id -u)}" -eq 0 ]]; then
-    echo "Run this installer as your normal user, not as root." >&2
-    exit 1
-fi
+REPO_URL="https://github.com/unixetp/dotfiles.git"
+DOTFILES_DIR="$HOME/dotfiles"
+BACKUP_DIR="$HOME/.config-backup-$(date +%Y%m%d-%H%M%S)"
 
-if [[ ! -r /etc/os-release ]]; then
-    echo "Cannot identify the operating system; this installer supports Arch Linux only." >&2
-    exit 1
-fi
-. /etc/os-release
-if [[ "${ID:-}" != arch ]] || ! command -v pacman >/dev/null 2>&1; then
-    echo "This installer supports Arch Linux only." >&2
-    exit 1
-fi
-
-repo_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-stow_packages=(hypr waybar rofi wlogout kitty foot dunst swaylock matugen)
-
-official_packages=(
-    brightnessctl
-    cliphist
-    dunst
-    fish
-    foot
-    git
-    gpu-screen-recorder-ui
-    grim
-    hyprland
-    hyprlock
-    hyprpicker
-    hyprpolkitagent
-    kitty
-    libnotify
-    matugen
-    nautilus
-    noto-fonts-emoji
-    playerctl
-    pipewire
-    pipewire-audio
-    pipewire-pulse
-    polkit
-    procps-ng
-    psmisc
-    python
-    python-pillow
-    rofi
-    rofi-emoji
-    slurp
-    stow
-    swaybg
-    swaylock
-    tesseract
-    tesseract-data-eng
-    tesseract-data-rus
-    ttf-font-awesome
-    ttf-jetbrains-mono-nerd
-    waybar
-    wireplumber
-    xdg-desktop-portal
-    xdg-desktop-portal-gtk
-    xdg-desktop-portal-hyprland
-    xdg-utils
-    xorg-xwayland
+PACMAN_PKGS=(
+    brightnessctl cliphist dunst gpu-screen-recorder-ui grim hyprland hyprlock
+    hyprpicker hyprpolkitagent kitty libnotify matugen nautilus noto-fonts-emoji
+    otf-font-awesome pipewire pipewire-audio pipewire-pulse playerctl python
+    python-pillow rofi slurp swaybg tesseract tesseract-data-eng tesseract-data-rus
+    ttf-jetbrains-mono-nerd waybar wireplumber wl-clipboard xdg-desktop-portal-hyprland
     ydotool
 )
-aur_packages=(bibata-cursor-theme cloudflare-warp-bin wlogout)
 
-missing_official=()
-for package in "${official_packages[@]}"; do
-    if ! pacman -Qq "$package" >/dev/null 2>&1; then
-        if ! pacman -Si "$package" >/dev/null 2>&1; then
-            echo "Package '$package' is not available in the enabled Arch repositories." >&2
-            echo "Update your package databases and rerun this installer." >&2
-            exit 1
-        fi
-        missing_official+=("$package")
-    fi
-done
+AUR_PKGS=(bibata-cursor-theme-bin)
 
-missing_aur=()
-for package in "${aur_packages[@]}"; do
-    if ! pacman -Qq "$package" >/dev/null 2>&1; then
-        missing_aur+=("$package")
-    fi
-done
-
-if ((${#missing_official[@]} || ${#missing_aur[@]})); then
-    echo "The following packages are missing:"
-    if ((${#missing_official[@]})); then
-        printf '  Official Arch repositories: %s\n' "${missing_official[*]}"
-    fi
-    if ((${#missing_aur[@]})); then
-        printf '  AUR (built locally): %s\n' "${missing_aur[*]}"
-        for package in "${missing_aur[@]}"; do
-            printf '    https://aur.archlinux.org/packages/%s\n' "$package"
-        done
-        echo "AUR build scripts will run as your user."
-    fi
-    read -r -p "Install these packages and continue? [y/N] " answer
-    if [[ ! "$answer" =~ ^[Yy]$ ]]; then
-        echo "Cancelled. No packages were installed."
-        exit 0
-    fi
-
-    if ((${#missing_official[@]} || ${#missing_aur[@]})); then
-        if ! command -v sudo >/dev/null 2>&1; then
-            echo "sudo is required to install system packages." >&2
-            exit 1
-        fi
-        sudo -v
-        pacman_args=(--needed)
-        if ((${#missing_aur[@]})); then
-            pacman_args+=(base-devel git)
-        fi
-        pacman_args+=("${missing_official[@]}")
-        echo "Installing missing packages with pacman -Syu (full system upgrade)."
-        sudo pacman -Syu "${pacman_args[@]}"
-    fi
-
-    if ((${#missing_aur[@]})); then
-        aur_build_dir="$(mktemp -d "${TMPDIR:-/tmp}/dotfiles-aur.XXXXXX")"
-        trap 'rm -rf -- "$aur_build_dir"' EXIT
-        for package in "${missing_aur[@]}"; do
-            git clone --depth 1 "https://aur.archlinux.org/${package}.git" "$aur_build_dir/$package"
-            (cd "$aur_build_dir/$package" && makepkg -si)
-        done
-    fi
-else
-    echo "All required packages are already installed."
+if [[ "${EUID:-$(id -u)}" -eq 0 ]]; then
+    echo "Run this installer as a normal user, not as root." >&2
+    exit 1
 fi
 
-backup_dir="$HOME/.config-backups/dotfiles-$(date +%Y%m%d-%H%M%S)"
-backed_up=0
-for package in "${stow_packages[@]}"; do
-    while IFS= read -r -d '' source_file; do
-        relative_path="${source_file#"$repo_dir/$package/"}"
-        target_file="$HOME/$relative_path"
+if ! command -v pacman >/dev/null 2>&1; then
+    echo "This installer requires pacman and supports Arch Linux." >&2
+    exit 1
+fi
 
-        if [[ -e "$target_file" || -L "$target_file" ]]; then
-            if [[ -L "$target_file" ]] && [[ "$(realpath -m -- "$target_file")" == "$(realpath -m -- "$source_file")" ]]; then
-                continue
-            fi
+echo "[1/4] Updating the system and installing required Arch packages..."
+sudo pacman -Syu --needed --noconfirm "${PACMAN_PKGS[@]}"
 
-            mkdir -p "$backup_dir/$(dirname -- "$relative_path")"
-            mv -- "$target_file" "$backup_dir/$relative_path"
-            backed_up=1
+echo "[2/4] Installing the configured cursor theme..."
+if ! command -v yay >/dev/null 2>&1; then
+    sudo pacman -S --needed --noconfirm git base-devel
+    yay_build_dir="$(mktemp -d "${TMPDIR:-/tmp}/yay-bin.XXXXXX")"
+    trap 'rm -rf -- "$yay_build_dir"' EXIT
+    git clone https://aur.archlinux.org/yay-bin.git "$yay_build_dir/yay-bin"
+    (cd "$yay_build_dir/yay-bin" && makepkg -si --noconfirm)
+    rm -rf -- "$yay_build_dir"
+    trap - EXIT
+fi
+yay -S --needed --noconfirm "${AUR_PKGS[@]}"
+
+echo "[3/4] Installing dotfiles..."
+script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+if [[ -e "$script_dir/.git" || -d "$script_dir/.config" || -d "$script_dir/hypr/.config" ]]; then
+    repo_dir="$script_dir"
+elif [[ -d "$DOTFILES_DIR/.git" ]]; then
+    git -C "$DOTFILES_DIR" pull --ff-only
+    repo_dir="$DOTFILES_DIR"
+else
+    git clone "$REPO_URL" "$DOTFILES_DIR"
+    repo_dir="$DOTFILES_DIR"
+fi
+
+echo "Using dotfiles from: $repo_dir"
+mkdir -p "$HOME/.config" "$BACKUP_DIR"
+shopt -s dotglob nullglob
+
+if [[ -d "$repo_dir/.config" ]]; then
+    config_sources=("$repo_dir"/.config/*)
+else
+    config_sources=()
+    for dir in "$repo_dir"/*/; do
+        if [[ -d "$dir/.config" ]]; then
+            config_sources+=("$dir"/.config/*)
         fi
-    done < <(find "$repo_dir/$package" -type f -print0)
+    done
+fi
+
+for source in "${config_sources[@]}"; do
+    name="${source##*/}"
+    target="$HOME/.config/$name"
+    if [[ -e "$target" || -L "$target" ]]; then
+        mv -- "$target" "$BACKUP_DIR/"
+    fi
+    cp -a -- "$source" "$target"
+    echo "Installed config: $name"
 done
 
-stow --dir="$repo_dir" --target="$HOME" --restow "${stow_packages[@]}"
+for file in .bashrc .zshrc .tmux.conf; do
+    if [[ -f "$repo_dir/$file" ]]; then
+        if [[ -e "$HOME/$file" || -L "$HOME/$file" ]]; then
+            cp -a -- "$HOME/$file" "$BACKUP_DIR/"
+        fi
+        cp -f -- "$repo_dir/$file" "$HOME/"
+    fi
+done
 
 if command -v systemctl >/dev/null 2>&1 && [[ -n "${XDG_RUNTIME_DIR:-}" ]]; then
     systemctl --user enable --now ydotool.service || echo "Could not start ydotool.service; clipboard paste shortcuts may not work." >&2
 fi
 
-if (( backed_up )); then
-    echo "Existing config files were backed up to: $backup_dir"
-fi
-echo "Arch dotfiles installed. Log out and back in to start using them."
+echo "[4/4] Installation complete."
+echo "Existing files were backed up to: $BACKUP_DIR"
+echo "Log out and back in to load the Hyprland config and start Waybar."
