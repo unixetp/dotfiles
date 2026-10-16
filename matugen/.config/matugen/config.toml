@@ -10,6 +10,7 @@ post_hook = 'killall -SIGUSR1 kitty'
 [templates.dunst]
 input_path = '~/.config/matugen/templates/dunst.conf'
 output_path = '~/.config/dunst/dunstrc'
+post_hook = 'dunstctl reload || true'
 
 [templates.rofi]
 input_path = '~/.config/matugen/templates/rofi-shared-colors.rasi'
