@@ -53,4 +53,8 @@ if command -v systemctl >/dev/null 2>&1 && [[ -n "${XDG_RUNTIME_DIR:-}" ]]; then
     systemctl --user daemon-reload
 fi
 
+state_dir="${XDG_STATE_HOME:-$HOME/.local/state}/dotfiles"
+mkdir -p "$state_dir"
+git -C "$repo_dir" rev-parse HEAD > "$state_dir/applied-commit"
+
 echo "Configuration files installed. Existing files were backed up to: $backup_dir"

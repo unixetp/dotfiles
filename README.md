@@ -12,7 +12,7 @@ Add your wallpapers to `~/Pictures/Wallpapers`. If this is a new WARP install, r
 
 The installer copies the bundled wallpapers into `~/Pictures/Wallpapers` without overwriting files already there. The Catppuccin wallpaper is used on first launch.
 
-The installer enables a user systemd timer that checks GitHub every six hours and applies new dotfiles commits. It does not update system packages. Updates are skipped if the local repository has uncommitted changes or is not on `main`; replaced config files are backed up under `~/.config-backup-*`.
+The installer enables a user systemd timer that checks GitHub every six hours and applies new dotfiles commits. Hyprland also checks on startup and sends a desktop notification with the result. New configs are applied immediately when the graphical session is available. This does not update system packages. Updates are skipped if the local repository has uncommitted changes or is not on `main`; replaced config files are backed up under `~/.config-backup-*`.
 
 To enable updates on an existing installation, run `./sync-configs.sh` and then `systemctl --user enable --now dotfiles-update.timer` from the repository directory.
 
