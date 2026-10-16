@@ -3,7 +3,6 @@ set -euo pipefail
 
 REPO_URL="https://github.com/unixetp/dotfiles.git"
 DOTFILES_DIR="$HOME/dotfiles"
-BACKUP_DIR="$HOME/.config-backup-$(date +%Y%m%d-%H%M%S)"
 
 PACMAN_PKGS=(
     brightnessctl cliphist dunst gpu-screen-recorder-ui grim hyprland hyprlock
@@ -54,42 +53,11 @@ else
 fi
 
 echo "Using dotfiles from: $repo_dir"
-mkdir -p "$HOME/.config" "$HOME/Pictures/Wallpapers" "$BACKUP_DIR"
-cp -an -- "$repo_dir"/wallpapers/. "$HOME/Pictures/Wallpapers/"
-shopt -s dotglob nullglob
-
-if [[ -d "$repo_dir/.config" ]]; then
-    config_sources=("$repo_dir"/.config/*)
-else
-    config_sources=()
-    for dir in "$repo_dir"/*/; do
-        if [[ -d "$dir/.config" ]]; then
-            config_sources+=("$dir"/.config/*)
-        fi
-    done
-fi
-
-for source in "${config_sources[@]}"; do
-    name="${source##*/}"
-    target="$HOME/.config/$name"
-    if [[ -e "$target" || -L "$target" ]]; then
-        mv -- "$target" "$BACKUP_DIR/"
-    fi
-    cp -a -- "$source" "$target"
-    echo "Installed config: $name"
-done
-
-for file in .bashrc .zshrc .tmux.conf; do
-    if [[ -f "$repo_dir/$file" ]]; then
-        if [[ -e "$HOME/$file" || -L "$HOME/$file" ]]; then
-            cp -a -- "$HOME/$file" "$BACKUP_DIR/"
-        fi
-        cp -f -- "$repo_dir/$file" "$HOME/"
-    fi
-done
+"$repo_dir/sync-configs.sh" "$repo_dir"
 
 if command -v systemctl >/dev/null 2>&1 && [[ -n "${XDG_RUNTIME_DIR:-}" ]]; then
     systemctl --user enable --now ydotool.service || echo "Could not start ydotool.service; clipboard paste shortcuts may not work." >&2
+    systemctl --user enable --now dotfiles-update.timer || echo "Could not enable the dotfiles update timer." >&2
 fi
 
 echo "[4/4] Installation complete."

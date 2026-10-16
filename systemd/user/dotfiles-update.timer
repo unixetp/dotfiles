@@ -1,0 +1,12 @@
+[Unit]
+Description=Check for dotfiles updates every six hours
+
+[Timer]
+OnBootSec=10m
+OnUnitActiveSec=6h
+RandomizedDelaySec=15m
+Persistent=true
+Unit=dotfiles-update.service
+
+[Install]
+WantedBy=timers.target
