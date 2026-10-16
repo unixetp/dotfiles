@@ -19,7 +19,7 @@ output_path = '~/.config/rofi/shared/colors.rasi'
 [templates.waybar]
 input_path = '~/.config/matugen/templates/waybar-current.css'
 output_path = '~/.config/waybar/current_theme.css'
-post_hook = 'pkill waybar; sleep 0.3; setsid -f waybar'
+post_hook = 'pkill -SIGUSR2 -x waybar || true'
 
 [templates.swaylock]
 input_path = '~/.config/matugen/templates/swaylock.conf'
