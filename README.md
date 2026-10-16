@@ -10,5 +10,7 @@ The installer installs the packages used by the included Hyprland setup, includi
 
 Add your wallpapers to `~/Pictures/Wallpapers`. If this is a new WARP install, register it with Cloudflare after setup.
 
+The installer copies the bundled wallpapers into `~/Pictures/Wallpapers` without overwriting files already there. The Catppuccin wallpaper is used on first launch.
+
 An AI combined the repo and all the dotfiles into one repo cuz im lazy.
 (i think about rewriting it in quickshell or smth)

@@ -8,7 +8,7 @@ if [[ -z "$wallpaper" ]]; then
     if [[ -f "$STATE_FILE" ]] && [[ -f "$(cat "$STATE_FILE")" ]]; then
         wallpaper="$(cat "$STATE_FILE")"
     else
-        wallpaper="$HOME/Pictures/Wallpapers/mandelbrot_gap_lavender.png"
+        wallpaper="$HOME/Pictures/Wallpapers/catpuccin.jpg"
     fi
 fi
 

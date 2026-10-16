@@ -54,7 +54,8 @@ else
 fi
 
 echo "Using dotfiles from: $repo_dir"
-mkdir -p "$HOME/.config" "$BACKUP_DIR"
+mkdir -p "$HOME/.config" "$HOME/Pictures/Wallpapers" "$BACKUP_DIR"
+cp -an -- "$repo_dir"/wallpapers/. "$HOME/Pictures/Wallpapers/"
 shopt -s dotglob nullglob
 
 if [[ -d "$repo_dir/.config" ]]; then
