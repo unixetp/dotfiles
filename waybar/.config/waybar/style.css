@@ -152,7 +152,7 @@ label:focus {
 label span {
   color: @power;
 }
-#custom-vpn {
+#custom-warp {
   font-weight: 700;
   background-color: @background;
   color: @foreground;
@@ -161,9 +161,9 @@ label span {
   margin-left: 0px;
   margin-right: 5px;
 }
-#custom-vpn.disabled {
+#custom-warp.disabled {
   color: #888888;
 }
-#custom-vpn.enabled {
+#custom-warp.enabled {
   color: #a6e3a1;
 }
